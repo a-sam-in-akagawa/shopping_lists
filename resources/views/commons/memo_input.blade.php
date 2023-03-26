@@ -1,6 +1,6 @@
 <div class="prose mx-auto grid grid-cols-6 gap-2">
     <div class="col-span-3">
-        <form method="POST" action="">
+        <form method="POST" action="{{ route('shopping_lists.store') }}">
             @csrf
             
             <label class="label">

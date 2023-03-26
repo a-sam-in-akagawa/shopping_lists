@@ -33,5 +33,5 @@ require __DIR__.'/auth.php';
 
 
 Route::group(['middleware' => ['auth']], function () {                                    // 追記
-    Route::resource('shopping_lists', Shopping_listsController::class, ['only' => ['store', 'destroy']]);     // 追記
+    Route::resource('shopping_lists', Shopping_listsController::class, ['only' => ['store', 'destroy', 'update']]);     // 追記
 });  

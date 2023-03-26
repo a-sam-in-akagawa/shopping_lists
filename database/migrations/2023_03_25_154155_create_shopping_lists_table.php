@@ -28,7 +28,7 @@ return new class extends Migration
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
             
             // user_idとnameの組み合わせの重複を許さない
-            $table->unique(['user_id', 'name']);
+            //$table->unique(['user_id', 'name']);
         });
     }
 
