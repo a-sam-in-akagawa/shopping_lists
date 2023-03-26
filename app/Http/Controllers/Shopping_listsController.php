@@ -82,13 +82,7 @@ class Shopping_listsController extends Controller
         
         $shopping_list->save();
 
-        // トップページへリダイレクトさせる
-        // return back('/');
-        if ($request->flg==="on") {
-            return redirect('/');
-        } else {
-            return redirect('purchase');
-        };
+        return back();
         
     }
     
@@ -129,5 +123,41 @@ class Shopping_listsController extends Controller
             $user->shopping_lists()->where('purchase_flg',true)->delete();
             return redirect('purchase');
         }
+    }
+    
+    public function filtering($id, $flg)
+    {
+        $data = [];
+        if (\Auth::check()) { // 認証済みの場合
+            // 認証済みユーザを取得
+            $user = \Auth::user();
+            
+            // 優先度と商品種類を取得
+            $priorities = \DB::table('priorities')->get();
+            $categories = \DB::table('categories')->get();
+            
+            // ユーザの商品一覧を優先度順で取得
+            if ($id==='null') {
+                $id = NULL;
+            }
+            if ($flg==='shopping') {
+                $shopping_lists = $user->shopping_lists()->where('purchase_flg',false)->
+                    where('category_id',$id)->orderByRaw('priority_id is null asc')->orderBy('priority_id', 'asc')->get();
+            } else {
+                $shopping_lists = $user->shopping_lists()->where('purchase_flg',true)->
+                    where('category_id',$id)->orderByRaw('priority_id is null asc')->orderBy('priority_id', 'asc')->get();
+            }
+            
+            $data = [
+                'user' => $user,
+                'shopping_lists' => $shopping_lists,
+                'priorities' => $priorities,
+                'categories' => $categories,
+                'flg' => $flg,
+            ];
+        }
+        
+        return view('/dashboard', $data);
+
     }
 }

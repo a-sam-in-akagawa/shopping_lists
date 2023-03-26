@@ -34,15 +34,16 @@
             <label class="label">
                 <span class="label-text">&nbsp;</span>
             </label>
-            <button type="submit" class="btn btn-neutral btn-block normal-case">登録</button>
+            <button type="submit" class="btn btn-neutral btn-block normal-case">メモ！</button>
         </div>
     </form>
+    
 </div>
 {{-- 全件削除ボタンのフォーム --}}
-<div class="mx-auto">
+<div class="flex justify-center p-2">
     <form method="POST" action="{{ route('destroy_all', $flg) }}">
         @csrf
-        <button name="del_all" value="{{$flg}}" type="submit" class="btn btn-error btn-sm normal-case"
+        <button name="del_all" value="{{$flg}}" type="submit" class="btn btn-error normal-case btn-wid"
          onclick="return confirm('全削除する？')">全削除</button>
     </form>
 </div>
