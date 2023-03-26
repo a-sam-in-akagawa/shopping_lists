@@ -19,6 +19,10 @@ use App\Http\Controllers\Shopping_listsController;
 Route::get('/', [Shopping_listsController::class, 'index']);
 
 Route::get('/dashboard', [Shopping_listsController::class, 'index'])->middleware(['auth'])->name('dashboard');
+//Route::get('/purchace', [Shopping_listsController::class, 'purchase_list'])->middleware(['auth'])->name('purchase');
+Route::get('/purchase', [Shopping_listsController::class, 'purchase_list'])->middleware(['auth'])->name('purchase');
+Route::post('/destroy_all', [Shopping_listsController::class, 'destroy_all'])->middleware(['auth'])->name('destroy_all');
+
 /*Route::get('/dashboard', function () {
     return view('list');
 })->middleware(['auth'])->name('dashboard');*/

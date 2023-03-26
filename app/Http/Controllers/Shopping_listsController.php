@@ -15,7 +15,7 @@ class Shopping_listsController extends Controller
             // 認証済みユーザを取得
             $user = \Auth::user();
             // ユーザの商品一覧を優先度順で取得
-            $shopping_lists = $user->shopping_lists()->where('purchase_flg','=','false')->orderByRaw('priority_id is null asc')->orderBy('priority_id', 'asc')->get();
+            $shopping_lists = $user->shopping_lists()->where('purchase_flg',false)->orderByRaw('priority_id is null asc')->orderBy('priority_id', 'asc')->get();
             // 優先度と商品種類を取得
             $priorities = \DB::table('priorities')->get();
             $categories = \DB::table('categories')->get();
@@ -25,6 +25,7 @@ class Shopping_listsController extends Controller
                 'shopping_lists' => $shopping_lists,
                 'priorities' => $priorities,
                 'categories' => $categories,
+                'flg' => 'shopping'
             ];
         }
         
@@ -51,7 +52,7 @@ class Shopping_listsController extends Controller
     }
     
     
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         // idの値で投稿を検索して取得
         $shopping_list = Shopping_list::findOrFail($id);
@@ -77,12 +78,56 @@ class Shopping_listsController extends Controller
             $shopping_list->purchase_flg = true;
         } else {
             $shopping_list->purchase_flg = false;
-        }
+        };
         
         $shopping_list->save();
 
         // トップページへリダイレクトさせる
-        return redirect('/');
+        // return back('/');
+        if ($request->flg==="on") {
+            return redirect('/');
+        } else {
+            return redirect('purchase');
+        };
+        
     }
     
+    public function purchase_list()
+    {
+        $data = [];
+        if (\Auth::check()) { // 認証済みの場合
+            // 認証済みユーザを取得
+            $user = \Auth::user();
+            // ユーザの商品一覧を優先度順で取得
+            $shopping_lists = $user->shopping_lists()->where('purchase_flg',true)->orderByRaw('priority_id is null asc')->orderBy('priority_id', 'asc')->get();
+            // 優先度と商品種類を取得
+            $priorities = \DB::table('priorities')->get();
+            $categories = \DB::table('categories')->get();
+
+            $data = [
+                'user' => $user,
+                'shopping_lists' => $shopping_lists,
+                'priorities' => $priorities,
+                'categories' => $categories,
+                'flg' => 'purchase'
+            ];
+        }
+        
+        // dashboardビューでそれらを表示
+        return view('dashboard', $data);
+    }
+    
+    public function destroy_all(Request $request)
+    {
+        
+        $user = \Auth::user();
+        // ユーザの商品一覧を優先度順で取得
+        if ($request->del_all==='shopping') {
+            $user->shopping_lists()->where('purchase_flg',false)->delete();
+            return redirect('/');
+        } else {
+            $user->shopping_lists()->where('purchase_flg',true)->delete();
+            return redirect('purchase');
+        }
+    }
 }

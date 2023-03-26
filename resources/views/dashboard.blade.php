@@ -2,10 +2,18 @@
 
 @section('content')
     @if (Auth::check())
+    @include('commons.navtab')
     
     @include('commons.memo_input')
     <!--dashboard.blead-->
-    @include('shopping_lists.shopping_lists')
+    
+    @if ($flg==='shopping')
+    <!--shopping-->
+        @include('shopping_lists.shopping_lists')
+    @else
+    <!--purchase-->
+        @include('shopping_lists.purchased_list')
+    @endif
 
     
     @else

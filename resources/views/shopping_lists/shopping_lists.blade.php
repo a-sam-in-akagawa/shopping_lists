@@ -24,7 +24,7 @@
                             <form method="POST" action="{{ route('shopping_lists.destroy', $shopping_list->id) }}">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-error btn-sm normal-case" 
+                                <button name="del_b" value="shopping" type="submit" class="btn btn-error btn-sm normal-case" 
                                     onclick="return confirm('Delete id = {{ $shopping_list->id }} ?')">削除</button>
                             </form>
                             {{-- 購入済ボタンのフォーム --}}

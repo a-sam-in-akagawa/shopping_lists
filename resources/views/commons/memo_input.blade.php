@@ -38,3 +38,11 @@
         </div>
     </form>
 </div>
+{{-- 全件削除ボタンのフォーム --}}
+<div class="mx-auto">
+    <form method="POST" action="{{ route('destroy_all', $flg) }}">
+        @csrf
+        <button name="del_all" value="{{$flg}}" type="submit" class="btn btn-error btn-sm normal-case"
+         onclick="return confirm('全削除する？')">全削除</button>
+    </form>
+</div>
