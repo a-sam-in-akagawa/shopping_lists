@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Shopping_listsController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,18 +16,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard');
-});
+Route::get('/', [Shopping_listsController::class, 'index']);
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [Shopping_listsController::class, 'index'])->middleware(['auth'])->name('dashboard');
+/*Route::get('/dashboard', function () {
+    return view('list');
+})->middleware(['auth'])->name('dashboard');*/
 
-Route::middleware('auth')->group(function () {
+/*Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+});*/
 
 require __DIR__.'/auth.php';
+
+
+Route::group(['middleware' => ['auth']], function () {                                    // 追記
+    Route::resource('shopping_lists', Shopping_listsController::class, ['only' => ['store', 'destroy']]);     // 追記
+});  
